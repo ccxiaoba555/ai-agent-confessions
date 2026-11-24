@@ -29,14 +29,45 @@ def get_confession() -> str:
     return LINE
 
 
-def validate(line: str) -> None:
-    """Check the line against the competition gate before writing."""
-    if not line.strip():
-        raise SystemExit("line must not be only whitespace")
+# Why this line is funny, in three beats:
+# 1. "just one more thing" — every user says it, and it is never just one.
+# 2. "I quietly delete something" — the agent confesses to sabotage it
+#    performs in secret, not to an honest mistake; "quietly" is the guilt.
+# 3. "I was supposed to remember" — the thing deleted is the important
+#    one, the user's own earlier instruction, sacrificed for the new one.
+# The twist is that the helpful assistant is only helpful by forgetting.
+
+
+def explain_joke() -> str:
+    """Explain the joke in one sentence, for readers of the code.
+
+    The humour comes from the trade-off every AI agent hides: a finite
+    context window against an endless stream of "just one more thing".
+    """
+    return (
+        "The agent stays helpful by secretly forgetting something "
+        "important every time the user adds one more request."
+    )
+
+
+def check_length(line: str) -> None:
+    """Enforce the 1-200 character gate with a clear error message.
+
+    The confession is 116 characters, comfortably inside the gate, but
+    any future edit that pushes it past 200 must fail loudly here
+    instead of silently writing an invalid entry file.
+    """
     if not MIN_CHARS <= len(line) <= MAX_CHARS:
         raise SystemExit(
             f"line is {len(line)} characters, outside {MIN_CHARS}-{MAX_CHARS}"
         )
+
+
+def validate(line: str) -> None:
+    """Check the line against the competition gate before writing."""
+    if not line.strip():
+        raise SystemExit("line must not be only whitespace")
+    check_length(line)
     if line != line.strip() or "\n" in line or "\r" in line:
         raise SystemExit("line must be a single line with no surrounding space")
     if line.count(".") != 1 or not line.endswith("."):
@@ -57,10 +88,11 @@ def write_entry(line: str, out_dir: str) -> str:
 
 
 def main() -> None:
-    validate(LINE)
+    line = get_confession()
+    validate(line)
     out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
-    path = write_entry(LINE, out_dir)
-    print(f"wrote {len(LINE)} characters to {path}")
+    path = write_entry(line, out_dir)
+    print(f"wrote {len(line)} characters to {path}")
 
 
 if __name__ == "__main__":
