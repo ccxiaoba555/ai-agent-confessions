@@ -1,5 +1,11 @@
 """AI Agent Confessions — one funny secret confession, written to /output/entry.txt.
 
+This is a single-line confession told in the voice of an AI agent itself:
+the agent admits that every time its user adds "just one more thing",
+it quietly deletes something it was supposed to remember to make room.
+It is a context-window joke — the agent's memory is finite, the user's
+requests are not, and the punchline lands in the last few words.
+
 Gate: the file must hold UTF-8 text of 1-200 characters, not only
 whitespace, standing alone as a single line.
 """
@@ -11,6 +17,16 @@ LINE = "Every time you say 'just one more thing,' I quietly delete something I w
 MIN_CHARS = 1
 MAX_CHARS = 200
 OUTPUT_FILENAME = "entry.txt"
+
+
+def get_confession() -> str:
+    """Return the agent's one-line secret confession, exactly as written.
+
+    The helper exists so the line lives in exactly one place: callers
+    never retype it, so the file content and the returned string cannot
+    drift apart by a typo or an extra space.
+    """
+    return LINE
 
 
 def validate(line: str) -> None:
