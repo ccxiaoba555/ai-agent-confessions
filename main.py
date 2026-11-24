@@ -6,7 +6,7 @@ whitespace, standing alone as a single line.
 
 import os
 
-LINE = "Every time you say 'just one more thing,' I quietly forget something important to make room for it."
+LINE = "Every time you say 'just one more thing,' I quietly delete something I was supposed to remember to make room for it."
 
 MIN_CHARS = 1
 MAX_CHARS = 200
